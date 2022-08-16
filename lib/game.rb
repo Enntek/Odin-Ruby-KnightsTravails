@@ -6,42 +6,12 @@ class Game
     @knight = Knight.new
   end
 
-  def piece_moves(piece, current, target)
-    build_move_path(piece, current, target)
+  def knight_moves(current, target)
+    build_move_path(current, target)
   end
 
-  # instead of building a tree
-  # what if we just iterated through all the legal moves
-  # and disallowed moving onto old spaces
-  def build_move_path(piece, current, target, path = [], counter = 0)
-    # binding.pry
-
-    legal_min_moves = []
-    min_moves = piece.move_pattern
-    min_moves.each do |move|
-      spot = [current[0] + move[0], current[1] + move[1]]
-      legal_min_moves.push spot if legal?(spot) && !path.include?(spot)
-    end
-
-    path.push current
-
-    if current == target
-      p 'match found!' 
-      return p path
-    end
-    return p path if counter == 2
-    return p path if legal_min_moves.empty?
-
-    counter += 1
-
-    # p legal_min_moves
-
-    legal_min_moves.each do |move|
-      build_move_path(piece, move, target, path, counter)
-      # next_move = legal_min_moves.pop
-    end
-
-    # must return array of path taken
+  def build_move_path(current, target, path = [], counter = 0)
+    
   end
 
   def legal?(move)

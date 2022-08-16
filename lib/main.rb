@@ -5,7 +5,7 @@ require 'pry-byebug'
 
 game = Game.new
 
-game.piece_moves(game.knight, [0, 0], [2, 1])
+game.knight_moves([0, 0], [2, 1])
 
 
 # p game.board.all_spaces

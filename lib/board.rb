@@ -16,8 +16,6 @@ class Board
     end
   end
 
-
-
 end
 
 # include list of spaces traversed, no double backing, only moving forward
