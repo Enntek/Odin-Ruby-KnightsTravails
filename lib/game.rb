@@ -15,6 +15,7 @@ class Game
 
     square = node.data
 
+    # legal next moves are 1) on the board, 2) an unvisited/new square
     legal_next_moves = knight.move_pattern.map do |pattern|
       next_move = [square[0] + pattern[0], square[1] + pattern[1]]
       if legal?(next_move) && new_square?(next_move, node.visited_nodes)
@@ -24,6 +25,7 @@ class Game
       end
     end
 
+    # loop through any legal moves, add them as edges to current node
     legal_next_moves.each do |next_move|
       if !next_move.nil?
         new_node = Node.new(next_move, node) # 
@@ -39,8 +41,9 @@ class Game
     #   p adjacent_node.data
     # end
 
-    node.next_valid_moves.each do |adjacent_node|
-      build_tree(adjacent_node)
+    # we use current node's array of next_valid_moves to build the next level
+    node.next_valid_moves.each do |next_move|
+      build_tree(next_move)
     end
   end
 
