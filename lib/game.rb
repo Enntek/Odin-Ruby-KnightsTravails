@@ -16,21 +16,19 @@ class Game
     square = node.data
 
     # legal next moves are 1) on the board, 2) an unvisited/new square
-    legal_next_moves = knight.move_pattern.map do |pattern|
+    legal_next_moves = []
+
+    knight.move_pattern.each do |pattern|
       next_move = [square[0] + pattern[0], square[1] + pattern[1]]
-      if legal?(next_move) && new_square?(next_move, node.visited_nodes)
-        next_move
-      else
-        nil
-      end
+      legal_next_moves.push next_move if legal?(next_move) && new_square?(next_move, node.visited_nodes)
     end
+
+    return if legal_next_moves.empty?
 
     # loop through any legal moves, add them as edges to current node
     legal_next_moves.each do |next_move|
-      if !next_move.nil?
-        new_node = Node.new(next_move, node) # 
-        node.add_edge(new_node) 
-      end
+        new_node = Node.new(next_move, node)
+        node.add_edge(new_node)
     end
 
     puts "\ncurrent square"
