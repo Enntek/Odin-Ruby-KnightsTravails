@@ -1,29 +1,57 @@
 class Game
-  attr_reader :board, :knight
+  attr_reader :board, :knight, :root
 
   def initialize
     @board = Board.new
     @knight = Knight.new
   end
-
+  
   def knight_moves(current, target)
-    build_move_path(current, target)
+    @root = Node.new(current)
+    build_tree(@root)
   end
 
-  def build_move_path(current, target, path = [], counter = 0)
-    
+  def build_tree(node)
+
+    square = node.data
+
+    legal_next_moves = knight.move_pattern.map do |pattern|
+      next_move = [square[0] + pattern[0], square[1] + pattern[1]]
+      if legal?(next_move) && new_square?(next_move, node.visited_nodes)
+        next_move
+      else
+        nil
+      end
+    end
+
+    legal_next_moves.each do |next_move|
+      if !next_move.nil?
+        new_node = Node.new(next_move, node) # 
+        node.add_edge(new_node) 
+      end
+    end
+
+    puts "\ncurrent square"
+    p square
+    puts 'visited nodes'
+    p node.visited_nodes
+    # node.next_valid_moves.each do |adjacent_node|
+    #   p adjacent_node.data
+    # end
+
+    node.next_valid_moves.each do |adjacent_node|
+      build_tree(adjacent_node)
+    end
   end
 
-  def legal?(move)
-    move.all? { |x| x >= 0 }
+  def legal?(next_move)
+    @board.all_squares.any? { |square| square == next_move }
+  end
+  
+  def new_square?(next_move, visited_squares)
+    visited_squares.none? { |visited_square| next_move == visited_square}
   end
 end
-
-# start with knight at current space [0, 0]
-# set target for [1, 2]
-# recursive method will move all legal spaces 1
-# if current = target, return path
-
 
 class String
   def black;          "\e[30m#{self}\e[0m" end
@@ -35,7 +63,7 @@ class String
   def cyan;           "\e[36m#{self}\e[0m" end
   def gray;           "\e[37m#{self}\e[0m" end
   def default;        "\e[39m#{self}\e[0m" end
-
+  
   def bg_black;       "\e[40m#{self}\e[0m" end
   def bg_red;         "\e[41m#{self}\e[0m" end
   def bg_green;       "\e[42m#{self}\e[0m" end
@@ -44,7 +72,7 @@ class String
   def bg_magenta;     "\e[45m#{self}\e[0m" end
   def bg_cyan;        "\e[46m#{self}\e[0m" end
   def bg_gray;        "\e[47m#{self}\e[0m" end
-
+  
   def bold;           "\e[1m#{self}\e[22m" end
   def italic;         "\e[3m#{self}\e[23m" end
   def underline;      "\e[4m#{self}\e[24m" end
