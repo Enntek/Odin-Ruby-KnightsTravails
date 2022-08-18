@@ -8,10 +8,10 @@ class Node
     @parent = parent
   end
 
-  def visited_list(node = self, visited_list = [])
-    return visited_list if node.nil?
+  def visited_squares(node = self, visited_squares = [])
+    return visited_squares if node.nil?
 
-    visited_list.unshift(node.data)
-    visited_list(node.parent, visited_list)
+    visited_squares.unshift(node.data)
+    visited_squares(node.parent, visited_squares)
   end
 end

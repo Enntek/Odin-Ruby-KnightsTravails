@@ -15,9 +15,7 @@ class Game
     node = queue.shift
 
     if target == node.data
-      count = node.visited_list.size
-      puts "You made it in #{count} moves! Here's your path:"
-      node.visited_list.each { |x| p x}
+      match(node)
       return
     end
 
@@ -25,7 +23,7 @@ class Game
     knight.move_pattern.each do |pattern|
       square = node.data
       next_move = [square[0] + pattern[0], square[1] + pattern[1]]
-      if legal?(next_move) && new_square?(next_move, node.visited_list)
+      if legal?(next_move) && new_square?(next_move, node.visited_squares)
         child_node = Node.new(next_move, node) # node is parent
         queue.push(child_node)
       end
@@ -40,6 +38,12 @@ class Game
   
   def new_square?(next_move, visited_squares)
     visited_squares.none? { |visited_square| next_move == visited_square}
+  end
+
+  def match(node)
+    count = node.visited_squares.size
+    puts "You made it in #{count} moves! Here's your path:"
+    node.visited_squares.each { |x| p x}
   end
 end
 
