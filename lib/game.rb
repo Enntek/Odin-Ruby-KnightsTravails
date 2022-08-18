@@ -5,44 +5,33 @@ class Game
     @board = Board.new
     @knight = Knight.new
   end
-  
+
   def knight_moves(current, target)
     @root = Node.new(current)
-    build_tree(@root)
+    level_order([@root], target)
   end
 
-  def build_tree(node)
+  def level_order(queue, target)
+    node = queue.shift
 
-    square = node.data
+    if target == node.data
+      count = node.visited_list.size
+      puts "You made it in #{count} moves! Here's your path:"
+      node.visited_list.each { |x| p x}
+      return
+    end
 
-    # legal next moves are 1) on the board, 2) an unvisited/new square
-    legal_next_moves = []
-
+    # add valid moves to queue
     knight.move_pattern.each do |pattern|
+      square = node.data
       next_move = [square[0] + pattern[0], square[1] + pattern[1]]
-      legal_next_moves.push next_move if legal?(next_move) && new_square?(next_move, node.visited_nodes)
+      if legal?(next_move) && new_square?(next_move, node.visited_list)
+        child_node = Node.new(next_move, node) # node is parent
+        queue.push(child_node)
+      end
     end
 
-    return if legal_next_moves.empty?
-
-    # loop through any legal moves, add them as edges to current node
-    legal_next_moves.each do |next_move|
-        new_node = Node.new(next_move, node)
-        node.add_edge(new_node)
-    end
-
-    puts "\ncurrent square"
-    p square
-    puts 'visited nodes'
-    p node.visited_nodes
-    # node.next_valid_moves.each do |adjacent_node|
-    #   p adjacent_node.data
-    # end
-
-    # we use current node's array of next_valid_moves to build the next level
-    node.next_valid_moves.each do |next_move|
-      build_tree(next_move)
-    end
+    level_order(queue, target)
   end
 
   def legal?(next_move)

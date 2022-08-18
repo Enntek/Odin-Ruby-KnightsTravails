@@ -5,5 +5,10 @@ require_relative 'node'
 require 'pry-byebug'
 
 game = Game.new
+game.board.one_side = 8
+max_index = game.board.one_side - 1 # if size of board is 8x8, size is 7
 
-game.knight_moves([0, 0], [2, 1])
+home = [3, 3]
+target = [4, 3] # use max_index here to find path from corner to corner
+game.knight_moves(home, target)
+
