@@ -23,7 +23,7 @@ class Game
     knight.move_pattern.each do |pattern|
       square = node.data
       next_move = [square[0] + pattern[0], square[1] + pattern[1]]
-      if legal?(next_move) && new_square?(next_move, node.visited_squares)
+      if on_board?(next_move) && unvisited?(next_move, node.visited_squares)
         child_node = Node.new(next_move, node) # node is parent
         queue.push(child_node)
       end
@@ -32,11 +32,11 @@ class Game
     level_order(queue, target)
   end
 
-  def legal?(next_move)
+  def on_board?(next_move)
     @board.all_squares.any? { |square| square == next_move }
   end
   
-  def new_square?(next_move, visited_squares)
+  def unvisited?(next_move, visited_squares)
     visited_squares.none? { |visited_square| next_move == visited_square}
   end
 
