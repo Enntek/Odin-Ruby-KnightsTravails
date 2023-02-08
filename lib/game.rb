@@ -19,7 +19,7 @@ class Game
       return
     end
 
-    # add valid moves to queue
+    # add valid next moves to queue
     knight.move_pattern.each do |pattern|
       square = node.data
       next_move = [square[0] + pattern[0], square[1] + pattern[1]]
@@ -35,7 +35,7 @@ class Game
   def on_board?(next_move)
     @board.all_squares.any? { |square| square == next_move }
   end
-  
+
   def unvisited?(next_move, visited_squares)
     visited_squares.none? { |visited_square| next_move == visited_square}
   end
